@@ -3,8 +3,9 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // GitHub Pages 部署在 https://<user>.github.io/fzcy-assistant/
+// Cloudflare Pages 等根路径部署时，用 VITE_BASE=/ 覆盖。
 // 本地开发时 Vite 会自动忽略该前缀。
-const base = '/fzcy-assistant/'
+const base = process.env.VITE_BASE ?? '/fzcy-assistant/'
 
 export default defineConfig({
   base,

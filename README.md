@@ -60,6 +60,10 @@ Vite 的 `base` 固定为 `/fzcy-assistant/`，因此 GitHub 仓库名需要是 
 
 部署前需要在仓库 **Settings → Pages → Build and deployment** 将 Source 设为 **GitHub Actions**。
 
+### Cloudflare Pages（自定义域名）
+
+想用自己的域名（例如 `fzcy.hiyaa.top`）访问时，可以部署到 Cloudflare Pages，不需要 NAS 或服务器。构建时设置 `VITE_BASE=/` 即可，GitHub Pages 的旧地址不受影响。完整步骤见 [docs/cloudflare-pages.md](docs/cloudflare-pages.md)。
+
 ## 手机安装
 
 1. 安卓 Chrome 打开上面的在线地址
