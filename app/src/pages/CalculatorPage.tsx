@@ -17,14 +17,13 @@ import { createScenarioId } from '../lib/storage'
 import {
   defaultScenarioName,
   formatMoney,
-  formatNumber,
-  formatPercent,
 } from '../lib/format'
 import { BottomSheet } from '../components/BottomSheet'
 import { InstallIcon } from '../components/Icons'
 import { MarginField } from '../components/MarginField'
 import { NumberField } from '../components/NumberField'
 import { SectionCard } from '../components/SectionCard'
+import { SummaryBar } from '../components/SummaryBar'
 
 interface CalculatorPageProps {
   form: FormValues
@@ -73,7 +72,6 @@ export function CalculatorPage({
     : Number.NaN
 
   const hasCosts = hasAnyCostInput(inputs)
-  const hasResult = Boolean(results) && hasCosts
   const canSave = Boolean(results) && hasCosts
 
   const openSave = () => {
@@ -104,129 +102,15 @@ export function CalculatorPage({
 
   return (
     <div className="page calculator-page">
-      <section className="result-card" aria-labelledby="result-title">
-        <div className="result-top">
-          <span className="result-label" id="result-title">
-            每月保本销售额
-          </span>
-          <span className="result-badge">
-            {errors.marginPct
-              ? '毛利率待填写'
-              : `毛利率 ${formatPercent(inputs.marginPct)}`}
-          </span>
-        </div>
-
-        <div className="result-main">
-          {hasResult && results ? (
-            <>
-              <span className="currency">¥</span>
-              {formatNumber(results.monthlyBreakEven)}
-            </>
-          ) : (
-            <>
-              <span className="currency">¥</span>
-              <span className="result-dash">—</span>
-            </>
-          )}
-        </div>
-
-        <p className="result-caption">
-          {!hasCosts
-            ? '填入下方固定成本，自动计算保本额'
-            : !isValid
-              ? '请修正下方标红的参数'
-              : '修改下方参数，结果实时更新'}
-        </p>
-
-        <div className="result-stats">
-          <div>
-            <span>日保本销售额</span>
-            <strong>
-              {hasResult && results
-                ? formatMoney(results.dailyBreakEven)
-                : '—'}
-            </strong>
-          </div>
-          <div>
-            <span>月固定总成本</span>
-            <strong>
-              {Number.isFinite(monthlyFixedCost)
-                ? formatMoney(monthlyFixedCost)
-                : '—'}
-            </strong>
-          </div>
-        </div>
-
-        {hasResult && results ? (
-          <div className="result-range">
-            <span className="range-label">毛利率参考</span>
-            <span>40% → {formatMoney(results.at40.monthlyBreakEven)}/月</span>
-            <span className="range-dot" aria-hidden="true" />
-            <span>45% → {formatMoney(results.at45.monthlyBreakEven)}/月</span>
-          </div>
-        ) : !hasCosts ? (
-          <button type="button" className="result-example" onClick={onFillExample}>
-            填入示例数据，看看效果
-            <span aria-hidden="true">→</span>
-          </button>
-        ) : null}
-      </section>
-
-      {hasResult && results ? (
-        <section className="insight-card" aria-labelledby="insight-title">
-          <div className="insight-head">
-            <h2 id="insight-title">每天要做到</h2>
-            <span>
-              客单价 {formatMoney(inputs.avgTicket)} · 转化率{' '}
-              {formatPercent(inputs.conversionPct)}
-            </span>
-          </div>
-
-          <div className="insight-grid">
-            <div className="insight-stat">
-              <span>至少成交</span>
-              <strong>
-                {results.dailyOrders}
-                <small>单</small>
-              </strong>
-            </div>
-            <div className="insight-stat">
-              <span>至少有效客流</span>
-              <strong>
-                {results.dailyTraffic}
-                <small>人</small>
-              </strong>
-            </div>
-          </div>
-
-          <div className="margin-compare">
-            <div>
-              <span>毛利率 40%</span>
-              <strong>
-                {formatMoney(results.at40.monthlyBreakEven)}
-                <small>/月</small>
-              </strong>
-              <em>
-                {results.at40.dailyOrders} 单 · {results.at40.dailyTraffic} 人/天
-              </em>
-            </div>
-            <div>
-              <span>毛利率 45%</span>
-              <strong>
-                {formatMoney(results.at45.monthlyBreakEven)}
-                <small>/月</small>
-              </strong>
-              <em>
-                {results.at45.dailyOrders} 单 · {results.at45.dailyTraffic} 人/天
-              </em>
-            </div>
-          </div>
-
-          <p className="insight-note">
-            单量和客流已向上取整，请按“至少”理解。毛利率越低，需要做到的营业额越高。
-          </p>
-        </section>
-      ) : null}
+      <h1 className="sr-only">保本测算</h1>
+      <div className="summary-spacer" aria-hidden="true" />
+      <SummaryBar
+        results={results}
+        inputsMarginPct={inputs.marginPct}
+        hasCosts={hasCosts}
+        marginError={errors.marginPct}
+        onFillExample={onFillExample}
+      />
 
       <SectionCard
         title="每月固定成本"

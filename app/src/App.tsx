@@ -123,42 +123,40 @@ function App() {
 
   return (
     <div className="app-shell">
-      <header
-        className={`app-header${route.page === 'detail' ? ' detail-header' : ''}`}
-      >
-        {route.page === 'detail' ? (
-          <>
-            <button
-              type="button"
-              className="icon-button"
-              onClick={() => navigate('#/saved')}
-              aria-label="返回方案记录"
-            >
-              <BackIcon className="icon-button-svg" />
-            </button>
-            <div className="detail-header-text">
-              <h1>方案详情</h1>
-              <p>保存时的参数与结果</p>
-            </div>
-            <span className="header-spacer" aria-hidden="true" />
-          </>
-        ) : (
-          <>
-            <div className="brand">
-              <BrandMark className="brand-mark" />
-              <div>
-                <h1>服装创业助手</h1>
-                <p>开店保本 · 方案存档</p>
+      {route.page !== 'calc' ? (
+        <header
+          className={`app-header${route.page === 'detail' ? ' detail-header' : ''}`}
+        >
+          {route.page === 'detail' ? (
+            <>
+              <button
+                type="button"
+                className="icon-button"
+                onClick={() => navigate('#/saved')}
+                aria-label="返回方案记录"
+              >
+                <BackIcon className="icon-button-svg" />
+              </button>
+              <div className="detail-header-text">
+                <h1>方案详情</h1>
+                <p>保存时的参数与结果</p>
               </div>
-            </div>
-            {route.page === 'saved' ? (
+              <span className="header-spacer" aria-hidden="true" />
+            </>
+          ) : (
+            <>
+              <div className="brand">
+                <BrandMark className="brand-mark" />
+                <div>
+                  <h1>服装创业助手</h1>
+                  <p>开店保本 · 方案存档</p>
+                </div>
+              </div>
               <span className="header-count">{scenarios.length} 套</span>
-            ) : (
-              <span className="header-local">仅存本机</span>
-            )}
-          </>
-        )}
-      </header>
+            </>
+          )}
+        </header>
+      ) : null}
 
       <main className="app-main">
         {route.page === 'calc' ? (
